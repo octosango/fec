@@ -45,7 +45,7 @@
     {#each f.rooms as r}
         <button class="ifx clases" data-kogi="{r.kogi[$yo_bikomaID]}" data-room="r.room">
             <div>{r.room}</div>
-            <span>{r.kogi[$yo_bikomaID] ? '○' : '×' }</span>
+            <span>{r.kogi[$yo_bikomaID] ? '×' : '○' }</span>
         </button>
     {/each}
 </div>
@@ -94,12 +94,12 @@
     color: rgb(143, 140, 135);
     border: 1px rgb(208, 207, 203) solid;
 }
-button[data-kogi='1'] { /* .green, */
+button[data-kogi='0'] { /* .green, */
     background-color: rgb(0, 135, 75);
     border-color: rgb(247, 253, 250);
     color: rgb(247, 253, 250);
 }
-button[data-kogi='0'] { /* .gray, */
+button[data-kogi='1'] { /* .gray, */
     background-color: rgb(229, 228, 227);
     border-color: rgb(143, 140, 135);
     color: rgb(143, 140, 135);
