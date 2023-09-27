@@ -9,34 +9,6 @@
     dayjs.extend(isBetween);
 
     import { fec, yo_bi, koma, yo_bikomaID } from './stores.js';
-    // import { npm_config_resolution_mode } from '$env/static/private';
-    
-    // let time = dayjs();
-    // $: day = time.day();
-    // let weekRadioday = day
-    // $: yo_bi = time.format('dd')
-    // $: koma = (() => {
-    //     if (time.isBefore(dayjs({h:9,m:0}))) { return 0 }
-    //     else if (time.isBetween(dayjs({h:9,m:0}),dayjs({h:10,m:40}),'m','[]')){return 1}
-    //     else if (time.isBetween(dayjs({h:10,m:50}),dayjs({h:12,m:30}),'m','[]')){return 2}
-    //     else if (time.isBetween(dayjs({h:12,m:30}),dayjs({h:13,m:20}),'m','[]')){return 0}
-    //     else if (time.isBetween(dayjs({h:13,m:20}),dayjs({h:15,m:0}),'m','[]')){return 3}
-    //     else if (time.isBetween(dayjs({h:15,m:10}),dayjs({h:16,m:50}),'m','[]')){return 4}
-    //     else if (time.isBetween(dayjs({h:17,m:0}),dayjs({h:18,m:40}),'m','[]')){return 5}
-    //     else if (time.isBetween(dayjs({h:18,m:50}),dayjs({h:20,m:30}),'m','[]')){return 6}
-    //     else {return 0}
-    // })()
-    // $: yo_bikomaID = 6 * (time.day() - 1) + koma
-
-    // onMount(() => {
-	// 	const interval = setInterval(() => {
-	// 		time = dayjs();
-	// 	}, 1000);
-
-	// 	return () => {
-	// 		clearInterval(interval);
-	// 	};
-	// });
 </script>
 
 {#each fec as f}
@@ -74,19 +46,19 @@
 .ifx {
     align-items: center;
     justify-content: center;
-    position: relative;
-    border-radius: 4px;
-    text-align: start;
+    /* position: relative; */
+    border-radius: .25rem;
+    /* text-align: start; */
     transition: box-shadow .1s cubic-bezier(0,0,0,1);
-    padding-inline: 4px;
+    /* padding-inline: .25rem; */
 
     display: inline-flex;
     flex-direction: column;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0px 4px;
+    /* flex-shrink: 0; */
+    /* margin: 0; */
+    padding: 0 .25rem;
     border: 0;
-    width: 3em;
+    width: 3rem;
 }
 .floor {
     background-color: transparent;
