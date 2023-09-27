@@ -175,6 +175,7 @@ aside {
     /* overflow-wrap: break-word; */
     /* padding-block: 0px; */
     /* padding: 0px; */
-    border-radius: 0.75rem;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
 }
 </style>
