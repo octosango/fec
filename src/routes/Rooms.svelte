@@ -11,69 +11,58 @@
     import { fec, yo_bi, koma, yo_bikomaID } from './stores.js';
 </script>
 
+<div class="norm pad">
 {#each fec as f}
-<div class="unit bfy">
-    <button class="ifx floor">{f.floor}</button>
+<div class="norm unit bfy">
+    <button class="norm center-justify center-align ifx flat floor">{f.floor}</button>
     {#each f.rooms as r}
-        <button class="ifx clases" data-kogi="{r.kogi[$yo_bikomaID]}" data-room="r.room">
-            <div>{r.room}</div>
+        <button class="norm flat center-justify center-align ifx clases" data-kogi="{r.kogi[$yo_bikomaID]}" data-room="r.room">
+            <div class="c3">{r.room}</div>
             <span>{r.kogi[$yo_bikomaID] ? '×' : '○' }</span>
         </button>
     {/each}
 </div>
 {/each}
+</div>
 
 <!-- 今は {$yo_bi} {$koma} です。IDは {$yo_bikomaID} です。 -->
 
 <style>
+.pad {
+    column-gap: 0.25rem;
+}
 .bfy {
-    border-radius: 0.5rem;
-    /* border: 1px rgb(208, 207, 203) solid; */
     gap: 0.25rem;
-    display: flex;
     flex-direction: row;
-    flex-shrink: 1;
-    width: 100%;
-    margin: 0;
     padding: 0.25rem;
-    font-family: inherit;
-    font-size: inherit;
-    background-color: transparent;
+    /* width: 100%; */
 }
 .clases:hover {
     box-shadow: 0 0 0 4px #63605a40;
 }
+.c3 {
+    width: 2.3rem;
+    text-align: center;
+}
 .ifx {
-    align-items: center;
-    justify-content: center;
-    /* position: relative; */
-    border-radius: .25rem;
-    /* text-align: start; */
-    transition: box-shadow .1s cubic-bezier(0,0,0,1);
-    /* padding-inline: .25rem; */
-
-    display: inline-flex;
     flex-direction: column;
-    /* flex-shrink: 0; */
-    /* margin: 0; */
-    padding: 0 .25rem;
-    border: 0;
-    width: 3rem;
+    /* width: 2.6rem; */
+    padding-inline: 0.14rem;
+    font-size: 0.9rem;
 }
 .floor {
-    background-color: transparent;
-    border-color: rgb(143, 140, 135);
-    color: rgb(143, 140, 135);
-    border: 1px rgb(208, 207, 203) solid;
+    /* justify-content: end; */
+    width: 1.3rem;
+    color: #8f8c87;
+    border: 1px #d0cfcb solid;
+    /* padding-inline: 0.25rem; */
 }
 button[data-kogi='0'] { /* .green, */
-    background-color: rgb(0, 135, 75);
-    border-color: rgb(247, 253, 250);
-    color: rgb(247, 253, 250);
+    background-color: #00874b;
+    color: #f7fdfa;
 }
 button[data-kogi='1'] { /* .gray, */
-    background-color: rgb(229, 228, 227);
-    border-color: rgb(143, 140, 135);
-    color: rgb(143, 140, 135);
+    background-color: #e5e4e3;
+    color: #8f8c87;
 }
 </style>

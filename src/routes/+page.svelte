@@ -6,42 +6,44 @@
     let componet = 'Svelte'
 </script>
 
-<div id="app" class="center bfy n">
-<header class="center bfy">
+<div id="app" class="norm center-align bfy">
+<header class="norm center-align center-justify bfy">
     <Header />
 </header>
 
-<main class="center">
+<main class="norm center bfy">
     <Rooms />
 </main>
 
-<footer class="center bfy">
+<footer class="norm bfy">
     <Footer />
 </footer>
 
-<aside class="center bfy">
+<aside class="norm center-align bfy">
     <Bottom />
 </aside>
 </div>
 
 
 <style>
-#app {
-    margin: 0;
-    padding: 0;
+:global(html) {
+    background: #fbfafa;
+    color: #3e3b36;
+}
+:global(body) {
+    margin: 0px;
+    padding: 0px;
     line-height: 1.5rem;
     line-break: strict;
     overflow-wrap: break-word;
-    word-wrap: break-word;
     list-style-type: none;
-    -webkit-text-size-adjust: none;
     text-size-adjust: none;
     text-decoration: none;
-    font-family: Inter, Roboto, "源ノ角ゴシック JP", "Noto Sans JP", ui-sans-serif, -apple-system, "system-ui", "Hiragino Sans", ヒラギノ角ゴシック, "Segoe UI", メイリオ, Meiryo, sans-serif;
-    font-feature-settings: "cv02","cv03","cv04","cv05","cv06","cv08","zero";
+    font-family: Inter, Roboto, "源ノ角ゴシック JP", "Noto Sans JP", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Hiragino Sans", ヒラギノ角ゴシック, "Segoe UI", メイリオ, Meiryo, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv05", "cv06", "cv08", "zero";
     font-size: medium;
 }
-.n {
+:global(.norm) {
     min-width: 0;
     max-width: 100%;
     min-height: 1.5rem;
@@ -68,114 +70,71 @@
     -webkit-appearance: none;
     appearance: none;
 }
-.bfy {
+:global(.bfy) {
     display: flex;
     flex-direction: column;
     flex-shrink: 1;
     width: 100%;
 }
-.center.bfy {
+:global(.bfx) {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 1;
+    width: 100%;
+}
+:global(.center-justify.bfy), :global(.center-justify.bfx), :global(.center-justify.ifx) {
     justify-content: center;
+    
+}
+:global(.center-align.bfy), :global(.center-align.bfx), :global(.center-align.ifx){
     align-items: center;
 }
-header, main, footer, aside {
-    /* appearance: none;
-    background-attachment: scroll;
-    background-clip: border-box; */
-
-    /* background-image: none;
-    background-origin: padding-box;
-    background-position: 0%;
-    background-repeat: repeat;
-    background-size: auto;
-    border-color: rgb(62, 59, 54);
-    border-radius: 0px;
-    border-style: none;
-    border-width: 0px; */
-
-    /* box-sizing: border-box;
-    color: rgb(62, 59, 54); */
-
-    /* font-size: 16px; */
-
-    /* line-break: strict;
-    line-height: 24px;
-    list-style-type: none;
-    margin: 0px;
-    max-width: 100%;
-    min-height: 24px;
-    min-width: 0px;
-    outline-color: rgb(62, 59, 54);
-    outline-style: none;
-    outline-width: 0px; */
-
-    /* text-decoration-color: rgb(62, 59, 54);
-    text-decoration-line: none;
-    text-decoration-style: solid;
-    text-decoration-thickness: auto;
-    text-size-adjust: 100%; */
-
-    /* -webkit-tap-highlight-color: rgba(0, 0, 0, 0); */
+:global(.ifx) {
+    display: inline-flex;
+    flex-direction: row;
+    flex-shrink: 0;
 }
-header, aside {
-    /* align-items: center;
-    background-color: rgb(251, 250, 250); */
-    /* width: 1201px; */
-    /* width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 1;
-    font-size: 16px;
-    position: sticky;
-    z-index: 1; */
-}
-main, footer {
-    /* background-color: rgba(0, 0, 0, 0);
-    overflow-wrap: break-word; */
+:global(.flat) {
+    position: relative;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 0 0 #63605a40;
+    text-align: start;
+    transition: box-shadow 0.1s cubic-bezier(0, 0, 0, 1) 0s;
 }
 header {
-    box-shadow: rgba(0, 0, 0, 0.13) 0px 2px 4px 0px;
-    column-gap: 8px;
-    /* height: 40px; */
-    justify-content: center;
-    padding-block: 4px;
-    padding: 4px 0px;
-    row-gap: 8px;
+    box-shadow: rgba(0, 0, 0, 0.13) 0px 2px 4px;
+    top: 0px;
+    position: sticky;
+    z-index: 1;
+    gap: 0.5rem;
+    /* bg-gray */
+    /* safe-area-inset-top は iphoneX+用 */
+    padding-block-start: calc(0.25rem + env(safe-area-inset-top));
+    padding-block-end: 0.25rem;
+    background: #fbfafa;
 }
 main {
-    /* column-gap: 4px; */
-    /* つけたした */
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* flex-shrink: 1; */
+    padding: 1rem;
+    /* row-gap: 1rem; */
+    /* gap: 0.5rem; */
+    /* column-gap: 0.25rem; */
+    width: calc(25 * 1rem);
     /* display: grid; */
-    /* grid-template-columns: 89px 89px 89px 89px; */
-    /* height: 748px; 多分計算 */
-    padding: 16px;
-    row-gap: 8px;
-    top: 0px;
-    /* width: 400px; */
-    font-size: 16px;
 }
 footer {
-    column-gap: 12px;
-    /* height: 304px; 多分計算 */
-    row-gap: 12px;
-    /* display: flex;
-    flex-direction: column;
-    flex-shrink: 1; */
-    /* width: 480; */
-    font-size: 12px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding: 1rem;
+    gap: 0.75rem;
+    width: calc(40 * 0.75rem);
 }
 aside {
-    /* align-items: center; */
     bottom: 0px;
     box-shadow: rgba(0, 0, 0, 0.13) 0px -2px 4px 0px;
-    /* height: 74px; */
-    /* overflow-wrap: break-word; */
-    /* padding-block: 0px; */
-    /* padding: 0px; */
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
+    position: sticky;
+    z-index: 1;
+    background: #fbfafa;
 }
 </style>
