@@ -5,7 +5,7 @@
 <div class="norm center-align bfx c30">
     <h1 class="norm b">
         Forest gateway 空き教室
-        <span class="colors gray">🦇🧳🐀</span>
+        <span class="colors gray">✊🐀</span>
     </h1>
     <div class="ifx">
         <span class="colors green">Aあ 🇯🇵</span>
