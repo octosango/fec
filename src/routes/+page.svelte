@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { SvelteMap } from 'svelte/reactivity';
 	import { Button } from 'bits-ui';
 	import { Drawer } from 'vaul-svelte';
 	import { format } from 'date-fns';
@@ -17,7 +18,7 @@
 
 	let buildings = $state<Building[]>([]);
 	let termIds = $state<number[]>([]);
-	let daySchedules = $state(new Map<number, ScheduleEntry[]>());
+	let daySchedules = $state(new SvelteMap<number, ScheduleEntry[]>());
 	let loading = $state(true);
 
 	const initDay = getCurrentDayOfWeek();
@@ -65,10 +66,14 @@
 			.eq('day_of_week', d)
 			.then(({ data }) => {
 				if (data) {
-					const map = new Map<number, ScheduleEntry[]>();
+					const map = new SvelteMap<number, ScheduleEntry[]>();
 					for (const s of data) {
-						if (!map.has(s.room_id)) map.set(s.room_id, []);
-						map.get(s.room_id)!.push({
+						let entries = map.get(s.room_id);
+						if (!entries) {
+							entries = [];
+							map.set(s.room_id, entries);
+						}
+						entries.push({
 							period: s.period,
 							label: s.label,
 							lectures: s.lectures as unknown as LectureInfo
@@ -103,7 +108,7 @@
 			<p class="text-sm text-stone-400">建物データがありません</p>
 		{:else}
 			<div class="flex flex-col gap-6">
-				{#each buildings as building}
+				{#each buildings as building (building.id)}
 					<RoomGrid
 						{building}
 						rooms={building.rooms}
@@ -154,7 +159,7 @@
 						<p class="text-sm text-stone-400">{DAYS[dayOfWeek]}曜日</p>
 					</div>
 					<div class="grid grid-cols-6 gap-1">
-						{#each PERIODS as p}
+						{#each PERIODS as p (p)}
 							{@const entry = roomSchedules.find((s) => s.period === p)}
 							<Button.Root
 								class="flex items-center justify-center rounded-md p-2 transition-colors {entry
@@ -176,6 +181,7 @@
 								{#if entry.lectures}
 									<p class="font-medium">{entry.lectures.name}</p>
 									{#if entry.lectures.url}
+										<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 										<a href={entry.lectures.url} target="_blank" rel="noopener" class="text-sm text-blue-600 underline">manaba</a>
 									{/if}
 								{:else}

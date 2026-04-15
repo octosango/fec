@@ -33,7 +33,7 @@
 <section>
 	<h2 class="mb-1 text-sm font-medium text-stone-400">{building.name}</h2>
 	<div class="flex flex-col gap-1">
-		{#each roomsByFloor as [floor, floorRooms]}
+		{#each roomsByFloor as [floor, floorRooms] (floor)}
 			<div class="flex items-start gap-1">
 				<span
 					class="shrink-0 rounded border border-stone-300 px-1.5 py-0.5 text-center text-sm text-stone-400"
@@ -41,7 +41,7 @@
 					{floor}F
 				</span>
 				<div class="flex flex-wrap gap-1">
-					{#each floorRooms as room}
+					{#each floorRooms as room (room.id)}
 						<RoomCell
 							name={room.name}
 							occupied={occupiedRoomIds.has(room.id)}
