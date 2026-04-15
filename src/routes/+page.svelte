@@ -92,13 +92,7 @@
 	}
 </script>
 
-<div class="flex min-h-svh flex-col bg-stone-50 text-stone-700">
-	<header class="sticky top-0 z-10 flex items-center justify-between bg-stone-50 px-4 py-2 shadow-sm">
-		<h1 class="flex items-center gap-2 text-base font-bold">中央大学／空き教室一覧 <span class="rounded bg-stone-200 px-1.5 py-0.5 text-xs font-normal text-stone-400">学生制作</span></h1>
-		<Button.Root class="rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors hover:bg-gray-100 active:bg-gray-200">認証</Button.Root>
-	</header>
-
-
+<div class="flex min-h-svh flex-col text-stone-700">
 	<main class="mx-auto w-full max-w-md flex-1 px-4 py-4">
 		{#if loading}
 			<p class="text-sm text-stone-400">読み込み中...</p>
