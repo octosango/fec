@@ -1,3 +1,11 @@
+# fec — 中央大学／空き教室一覧
+
+https://fec-app.link/
+
+中央大学多摩キャンパスの空き教室を、曜日・時限から検索できます。学生が制作した非公式サービス。
+
+---
+
 # sv
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).

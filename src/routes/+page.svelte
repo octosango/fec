@@ -133,6 +133,10 @@
 				</span>
 			</div>
 			<p>空き教室は個人での自習にのみ利用可能です。空き状況は臨時使用等により表示と異なる場合があります。</p>
+			<p>
+				このアプリはオープンソースです。<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+				<a href="https://github.com/octosango/fec" target="_blank" rel="noopener" class="text-blue-600 underline">GitHubでコードを見る</a>
+			</p>
 		</div>
 	</footer>
 
