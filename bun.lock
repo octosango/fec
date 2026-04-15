@@ -6,6 +6,7 @@
       "name": "fec",
       "dependencies": {
         "@fontsource/noto-sans-mono": "^5.2.10",
+        "@lucide/svelte": "^1.8.0",
         "@supabase/supabase-js": "^2.103.0",
         "bits-ui": "^2.17.3",
         "date-fns": "^4.1.0",
@@ -209,6 +210,8 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@lucide/svelte": ["@lucide/svelte@1.8.0", "", { "peerDependencies": { "svelte": "^5" } }, "sha512-+zYQUKqEOVP5lxbGmxL1OVgGMQtRK91eIJ0bR+3Cr1ts4oQEsQfxyzzd5X47psJlblAuGFrl2xm4YuATjR9oaA=="],
 
     "@melt-ui/svelte": ["@melt-ui/svelte@0.76.2", "", { "dependencies": { "@floating-ui/core": "^1.3.1", "@floating-ui/dom": "^1.4.5", "@internationalized/date": "^3.5.0", "dequal": "^2.0.3", "focus-trap": "^7.5.2", "nanoid": "^5.0.4" }, "peerDependencies": { "svelte": ">=3 <5" } }, "sha512-7SbOa11tXUS95T3fReL+dwDs5FyJtCEqrqG3inRziDws346SYLsxOQ6HmX+4BkIsQh1R8U3XNa+EMmdMt38lMA=="],
 
