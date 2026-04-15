@@ -87,7 +87,7 @@
 	function handleRoomClick(room: Room, building: Building) {
 		selectedRoom = room;
 		selectedBuilding = building;
-		drawerPeriod = null;
+		drawerPeriod = periods.length === 1 ? periods[0] : null;
 		drawerOpen = true;
 	}
 </script>
@@ -95,7 +95,7 @@
 <div class="flex min-h-svh flex-col bg-stone-50 text-stone-700">
 	<header class="sticky top-0 z-10 flex items-center justify-between bg-stone-50 px-4 py-2 shadow-sm">
 		<h1 class="flex items-center gap-2 text-base font-bold">中央大学／空き教室一覧 <span class="rounded bg-stone-200 px-1.5 py-0.5 text-xs font-normal text-stone-400">学生制作</span></h1>
-		<Button.Root class="rounded-md px-3 py-1.5 text-base text-stone-500 ring-1 ring-stone-300 transition-colors hover:bg-gray-100 active:bg-gray-200">認証</Button.Root>
+		<Button.Root class="rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors hover:bg-gray-100 active:bg-gray-200">認証</Button.Root>
 	</header>
 
 
@@ -120,31 +120,31 @@
 		{/if}
 	</main>
 
-	<footer class="mx-auto w-full max-w-md px-4 py-4 text-xs text-stone-400">
-		<div class="flex flex-col gap-2 rounded-2xl border border-stone-300 p-3">
-			<div class="flex gap-3">
+	<footer class="mx-auto w-full max-w-md px-4 py-4 text-sm text-stone-500">
+		<div class="flex flex-col gap-2 rounded-xl border border-stone-300 px-3 py-3.5">
+			<div class="flex gap-4 mb-1.5">
 				<span class="flex items-center gap-1">
-					<span class="inline-block rounded bg-green-700 px-1.5 py-0.5 text-center text-sm text-green-50">○</span>
+					<span class="inline-block w-6 rounded bg-green-700 py-0.5 text-center text-sm text-green-50 mr-0.5">○</span>
 					空き
 				</span>
 				<span class="flex items-center gap-1">
-					<span class="inline-block rounded bg-stone-200 px-1.5 py-0.5 text-center text-sm text-stone-400">×</span>
+					<span class="inline-block w-6 rounded bg-stone-200 py-0.5 text-center text-sm text-stone-400 mr-0.5">×</span>
 					使用中
 				</span>
 			</div>
 			<p>空き教室は個人での自習にのみ利用可能です。空き状況は臨時使用等により表示と異なる場合があります。</p>
-			<p>
+			<p class="text-stone-400">
 				このアプリはオープンソースです。<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-				<a href="https://github.com/octosango/fec" target="_blank" rel="noopener" class="text-blue-600 underline">GitHubでコードを見る</a>
+				<a href="https://github.com/octosango/fec" target="_blank" rel="noopener" class="text-stone-400 underline decoration-dashed underline-offset-2">GitHubでコードを見る</a>
 			</p>
 		</div>
 	</footer>
 
-	<div class="h-28"></div>
+	<div class="h-28 lg:h-20"></div>
 </div>
 
-<div class="fixed bottom-0 left-0 right-0 z-20 flex justify-center px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-	<div class="rounded-2xl border border-stone-300 bg-stone-50/95 px-3 py-1.5 shadow-lg backdrop-blur-sm">
+<div class="fixed inset-x-0 bottom-0 z-20 mx-auto flex max-w-lg justify-center px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+	<div class="rounded-xl border border-stone-300 bg-stone-50/95 px-1.5 py-1.5 shadow-lg backdrop-blur-sm">
 		<PeriodSelector bind:dayOfWeek bind:periods />
 	</div>
 </div>
@@ -152,7 +152,7 @@
 <Drawer.Root bind:open={drawerOpen}>
 	<Drawer.Portal>
 		<Drawer.Overlay class="fixed inset-0 z-30 bg-black/40" />
-		<Drawer.Content class="fixed bottom-0 left-0 right-0 z-30 rounded-t-xl bg-stone-50 p-4">
+		<Drawer.Content class="fixed inset-x-0 bottom-0 z-30 mx-auto w-full max-w-lg rounded-t-xl bg-stone-50 p-4">
 			<div class="mx-auto mb-4 h-1.5 w-12 rounded-full bg-stone-300"></div>
 			{#if selectedRoom && selectedBuilding}
 				{@const roomSchedules = daySchedules.get(selectedRoom.id) ?? []}
@@ -168,19 +168,19 @@
 							<Button.Root
 								class="flex items-center justify-center rounded-md p-2 transition-colors {entry
 									? 'bg-stone-200 text-stone-400'
-									: 'bg-green-100 text-green-700'} {drawerPeriod === p
+									: 'bg-green-700 text-green-50'} {drawerPeriod === p
 									? 'ring-2 ring-stone-700/30'
 									: ''}"
 								onclick={() => (drawerPeriod = drawerPeriod === p ? null : p)}
 							>
-								<span class="text-sm">{p}</span>
+								<span class="text-base">{p}</span>
 							</Button.Root>
 						{/each}
 					</div>
-					{#if drawerPeriod}
-						{@const entry = roomSchedules.find((s) => s.period === drawerPeriod)}
-						<div class="rounded-lg border border-stone-300 p-3">
-							<p class="text-xs text-stone-400">{drawerPeriod}限</p>
+					<div class="min-h-28 rounded-lg border border-stone-300 p-3">
+						<p class="text-xs text-stone-400">{DAYS[dayOfWeek]}曜{drawerPeriod ? ` ${drawerPeriod}限` : ''}</p>
+						{#if drawerPeriod}
+							{@const entry = roomSchedules.find((s) => s.period === drawerPeriod)}
 							{#if entry}
 								{#if entry.lectures}
 									<p class="font-medium">{entry.lectures.name}</p>
@@ -190,13 +190,15 @@
 									{/if}
 								{:else}
 									<p class="text-stone-400">{entry.label ?? '使用中'}</p>
-									<Button.Root class="mt-2 rounded-lg bg-stone-700 px-3 py-1.5 text-sm text-stone-50 active:bg-stone-800">認証して授業情報を確認</Button.Root>
+									<Button.Root class="mt-2 rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors hover:bg-gray-100 active:bg-gray-200">認証して詳細を見る</Button.Root>
 								{/if}
 							{:else}
 								<p class="text-green-700">空き</p>
 							{/if}
-						</div>
-					{/if}
+						{:else}
+							<p class="text-stone-400">コマをタップして利用状況を確認</p>
+						{/if}
+					</div>
 				</div>
 			{/if}
 		</Drawer.Content>
