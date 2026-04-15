@@ -5,6 +5,7 @@
 	import { Drawer } from 'vaul-svelte';
 	import { format } from 'date-fns';
 	import { supabase } from '$lib/supabase';
+	import { auth, signInWithGoogle } from '$lib/auth.svelte';
 	import { getCurrentDayOfWeek, getCurrentPeriod, DAYS } from '$lib/time';
 	import PeriodSelector from '$lib/components/PeriodSelector.svelte';
 	import RoomGrid from '$lib/components/RoomGrid.svelte';
@@ -13,8 +14,13 @@
 
 	type Room = { id: number; name: string; floor: number; pin: string };
 	type Building = { id: number; name: string; pin: string; rooms: Room[] };
-	type LectureInfo = { name: string; url: string | null } | null;
-	type ScheduleEntry = { period: number; label: string | null; lectures: LectureInfo };
+	type LectureInfo = { name: string; instructor: string | null; url: string | null } | null;
+	type ScheduleEntry = {
+		period: number;
+		label: string | null;
+		lecture_id: number | null;
+		lectures: LectureInfo;
+	};
 
 	let buildings = $state<Building[]>([]);
 	let termIds = $state<number[]>([]);
@@ -57,11 +63,12 @@
 	$effect(() => {
 		const d = dayOfWeek;
 		const t = termIds;
+		void auth.user; // re-fetch on auth change (RLS on lectures)
 		if (t.length === 0) return;
 
 		supabase
 			.from('schedules')
-			.select('room_id, period, label, lectures(name, url)')
+			.select('room_id, period, label, lecture_id, lectures(name, instructor, url)')
 			.in('term_id', t)
 			.eq('day_of_week', d)
 			.then(({ data }) => {
@@ -76,6 +83,7 @@
 						entries.push({
 							period: s.period,
 							label: s.label,
+							lecture_id: s.lecture_id,
 							lectures: s.lectures as unknown as LectureInfo
 						});
 					}
@@ -178,13 +186,20 @@
 							{#if entry}
 								{#if entry.lectures}
 									<p class="font-medium">{entry.lectures.name}</p>
+									{#if entry.lectures.instructor}
+										<p class="text-sm text-stone-500">{entry.lectures.instructor}</p>
+									{/if}
 									{#if entry.lectures.url}
 										<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 										<a href={entry.lectures.url} target="_blank" rel="noopener" class="text-sm text-blue-600 underline">manaba</a>
 									{/if}
+								{:else if entry.label}
+									<p class="font-medium">{entry.label}</p>
+								{:else if entry.lecture_id && !auth.user}
+									<p class="text-stone-400">使用中</p>
+									<Button.Root onclick={signInWithGoogle} class="mt-2 rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors active:bg-gray-200">認証して授業名を見る</Button.Root>
 								{:else}
-									<p class="text-stone-400">{entry.label ?? '使用中'}</p>
-									<Button.Root class="mt-2 rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors hover:bg-gray-100 active:bg-gray-200">認証して詳細を見る</Button.Root>
+									<p class="text-stone-400">使用中</p>
 								{/if}
 							{:else}
 								<p class="text-green-700">空き</p>
