@@ -8,5 +8,10 @@
     "directory": ".svelte-kit/cloudflare",
     "binding": "ASSETS"
   },
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  "routes": [{ "pattern": "fec-app.link", "custom_domain": true }],
+  "vars": {
+    "PUBLIC_SUPABASE_PROJECT_ID": "cnjgbeglxchpclkmqtwb",
+    "PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_K7N_rEVpldfo46xlMLAL5w_9IMUOFI_"
+  }
 }
