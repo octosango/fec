@@ -44,7 +44,6 @@
 	let drawerOpen = $state(false);
 	let selectedRoom = $state<Room | null>(null);
 	let selectedBuilding = $state<Building | null>(null);
-	let drawerPeriod = $state<number | null>(null);
 
 	onMount(async () => {
 		const today = format(new Date(), 'yyyy-MM-dd');
@@ -95,7 +94,6 @@
 	function handleRoomClick(room: Room, building: Building) {
 		selectedRoom = room;
 		selectedBuilding = building;
-		drawerPeriod = periods.length === 1 ? periods[0] : null;
 		drawerOpen = true;
 	}
 </script>
@@ -174,44 +172,52 @@
 							<Button.Root
 								class="flex items-center justify-center rounded-md p-2 transition-colors {entry
 									? 'bg-stone-200 text-stone-400'
-									: 'bg-green-700 text-green-50'} {drawerPeriod === p
+									: 'bg-green-700 text-green-50'} {periods.includes(p)
 									? 'ring-2 ring-stone-700/30'
 									: ''}"
-								onclick={() => (drawerPeriod = drawerPeriod === p ? null : p)}
+								onclick={() => (periods = periods.includes(p) ? periods.filter((v) => v !== p) : [...periods, p].sort())}
 							>
 								<span class="text-base">{p}</span>
 							</Button.Root>
 						{/each}
 					</div>
-					<div class="min-h-28 rounded-lg border border-stone-300 p-3">
-						<p class="text-xs text-stone-400">{DAYS[dayOfWeek]}曜{drawerPeriod ? ` ${drawerPeriod}限` : ''}</p>
-						{#if drawerPeriod}
-							{@const entry = roomSchedules.find((s) => s.period === drawerPeriod)}
-							{#if entry}
-								{#if entry.lectures}
-									<p class="font-medium">{entry.lectures.name}</p>
-									{#if entry.lectures.instructor}
-										<p class="text-sm text-stone-500">{entry.lectures.instructor}</p>
-									{/if}
-									{#if entry.lectures.url}
+					{#if periods.length > 0}
+						<div class="flex flex-col gap-2">
+							{#each periods as dp (dp)}
+								{@const entry = roomSchedules.find((s) => s.period === dp)}
+								<div class="flex items-center gap-3 rounded-lg border border-stone-300 p-3">
+									<div class="flex-1">
+										<p class="text-xs text-stone-400">{DAYS[dayOfWeek]}曜 {dp}限</p>
+										{#if entry}
+											{#if entry.lectures}
+												<p class="font-medium">{entry.lectures.name}</p>
+												{#if entry.lectures.instructor}
+													<p class="text-sm text-stone-500">{entry.lectures.instructor}</p>
+												{/if}
+											{:else if entry.label}
+												<p class="font-medium">{entry.label}</p>
+											{:else if entry.lecture_id && !auth.user}
+												<p class="text-stone-400">使用中</p>
+												<Button.Root onclick={signInWithGoogle} class="mt-2 rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors active:bg-gray-200">認証して授業名を見る</Button.Root>
+											{:else}
+												<p class="text-stone-400">使用中</p>
+											{/if}
+										{:else}
+											<p class="text-green-700">空き</p>
+										{/if}
+									</div>
+									{#if entry?.lectures?.url}
 										<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-										<a href={entry.lectures.url} target="_blank" rel="noopener" class="text-sm text-blue-600 underline">manaba</a>
+										<a href={entry.lectures.url} target="_blank" rel="noopener" class="shrink-0 rounded-full px-4 py-2.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors active:bg-stone-200">manaba</a>
 									{/if}
-								{:else if entry.label}
-									<p class="font-medium">{entry.label}</p>
-								{:else if entry.lecture_id && !auth.user}
-									<p class="text-stone-400">使用中</p>
-									<Button.Root onclick={signInWithGoogle} class="mt-2 rounded-full px-3.5 py-1.5 text-sm text-stone-500 ring-1 ring-stone-300 transition-colors active:bg-gray-200">認証して授業名を見る</Button.Root>
-								{:else}
-									<p class="text-stone-400">使用中</p>
-								{/if}
-							{:else}
-								<p class="text-green-700">空き</p>
-							{/if}
-						{:else}
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<div class="rounded-lg border border-stone-300 p-3">
 							<p class="text-stone-400">コマをタップして利用状況を確認</p>
-						{/if}
-					</div>
+						</div>
+					{/if}
 				</div>
 			{/if}
 		</Drawer.Content>
