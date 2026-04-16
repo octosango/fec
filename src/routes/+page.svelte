@@ -25,6 +25,9 @@
 	let daySchedules = $state(new SvelteMap<number, ScheduleEntry[]>());
 	let loading = $state(true);
 
+	// 曜日 × 認証状態 をキーにした取得結果のキャッシュ（セッション中のみ有効）
+	const scheduleCache = new SvelteMap<string, SvelteMap<number, ScheduleEntry[]>>();
+
 	// クライアント時刻に依存するので onMount で初期化（SSR は UTC で動くため）
 	let dayOfWeek = $state(0);
 	let periods = $state<number[]>([]);
@@ -65,8 +68,15 @@
 	$effect(() => {
 		const d = dayOfWeek;
 		const t = termIds;
-		void auth.user; // re-fetch on auth change (RLS on lectures)
+		const userKey = auth.user?.id ?? 'anon'; // RLS on lectures によって結果が変わる
 		if (t.length === 0) return;
+
+		const cacheKey = `${userKey}:${d}`;
+		const cached = scheduleCache.get(cacheKey);
+		if (cached) {
+			daySchedules = cached;
+			return;
+		}
 
 		supabase
 			.from('schedules')
@@ -89,6 +99,7 @@
 							lectures: s.lectures as unknown as LectureInfo
 						});
 					}
+					scheduleCache.set(cacheKey, map);
 					daySchedules = map;
 				}
 			});
