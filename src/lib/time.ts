@@ -11,12 +11,12 @@ const PERIOD_RANGES: [number, number][] = [
 	[1130, 1230] // 6限: 18:50-20:30
 ];
 
-/** Returns current period (1-6) or 0 if outside class hours */
+/** Returns current period (1-6); during breaks returns the upcoming period; 0 after the last period */
 export function getCurrentPeriod(): number {
 	const now = new Date();
 	const minutes = now.getHours() * 60 + now.getMinutes();
 	for (let i = 0; i < PERIOD_RANGES.length; i++) {
-		if (minutes >= PERIOD_RANGES[i][0] && minutes <= PERIOD_RANGES[i][1]) {
+		if (minutes <= PERIOD_RANGES[i][1]) {
 			return i + 1;
 		}
 	}
