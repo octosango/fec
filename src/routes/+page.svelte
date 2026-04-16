@@ -6,11 +6,9 @@
 	import { format } from 'date-fns';
 	import { supabase } from '$lib/supabase';
 	import { auth, signInWithGoogle } from '$lib/auth.svelte';
-	import { getCurrentDayOfWeek, getCurrentPeriod, DAYS } from '$lib/time';
+	import { getCurrentDayOfWeek, getCurrentPeriod, DAYS, PERIODS } from '$lib/time';
 	import PeriodSelector from '$lib/components/PeriodSelector.svelte';
 	import RoomGrid from '$lib/components/RoomGrid.svelte';
-
-	import { PERIODS } from '$lib/time';
 
 	type Room = { id: number; name: string; floor: number; pin: string };
 	type Building = { id: number; name: string; pin: string; rooms: Room[] };
@@ -27,10 +25,9 @@
 	let daySchedules = $state(new SvelteMap<number, ScheduleEntry[]>());
 	let loading = $state(true);
 
-	const initDay = getCurrentDayOfWeek();
-	let dayOfWeek = $state(initDay >= 0 ? initDay : 0);
-	const initPeriod = getCurrentPeriod();
-	let periods = $state(initPeriod ? [initPeriod] : []);
+	// クライアント時刻に依存するので onMount で初期化（SSR は UTC で動くため）
+	let dayOfWeek = $state(0);
+	let periods = $state<number[]>([]);
 
 	let occupiedRoomIds = $derived(
 		periods.length === 0
@@ -47,6 +44,11 @@
 	let selectedBuilding = $state<Building | null>(null);
 
 	onMount(async () => {
+		const initDay = getCurrentDayOfWeek();
+		if (initDay >= 0) dayOfWeek = initDay;
+		const initPeriod = getCurrentPeriod();
+		if (initPeriod) periods = [initPeriod];
+
 		const today = format(new Date(), 'yyyy-MM-dd');
 		const [bRes, tRes] = await Promise.all([
 			supabase
