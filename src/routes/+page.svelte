@@ -29,7 +29,8 @@
 
 	const initDay = getCurrentDayOfWeek();
 	let dayOfWeek = $state(initDay >= 0 ? initDay : 0);
-	let periods = $state([getCurrentPeriod() || 1]);
+	const initPeriod = getCurrentPeriod();
+	let periods = $state(initPeriod ? [initPeriod] : []);
 
 	let occupiedRoomIds = $derived(
 		periods.length === 0
