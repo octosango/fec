@@ -21,7 +21,7 @@
 	};
 
 	let buildings = $state<Building[]>([]);
-	let termIds = $state<number[]>([]);
+	let terms = $state<{ id: number; year: number; term: string }[]>([]);
 	let daySchedules = $state(new SvelteMap<number, ScheduleEntry[]>());
 	let loading = $state(true);
 
@@ -42,6 +42,16 @@
 				)
 	);
 
+	let termLabel = $derived.by(() => {
+		const byYear = new Map<number, string[]>();
+		for (const t of terms) {
+			const list = byYear.get(t.year) ?? [];
+			list.push(t.term);
+			byYear.set(t.year, list);
+		}
+		return [...byYear.entries()].map(([y, ts]) => `${y}年度 ${ts.join('・')}`).join('・');
+	});
+
 	let drawerOpen = $state(false);
 	let selectedRoom = $state<Room | null>(null);
 	let selectedBuilding = $state<Building | null>(null);
@@ -58,16 +68,20 @@
 				.from('buildings')
 				.select('id, name, pin, rooms(id, name, floor, pin)')
 				.order('name'),
-			supabase.from('terms').select('id').lte('start_date', today).gte('end_date', today)
+			supabase
+				.from('terms')
+				.select('id, year, term')
+				.lte('start_date', today)
+				.gte('end_date', today)
 		]);
 		if (bRes.data) buildings = bRes.data;
-		if (tRes.data) termIds = tRes.data.map((t) => t.id);
+		if (tRes.data) terms = tRes.data;
 		loading = false;
 	});
 
 	$effect(() => {
 		const d = dayOfWeek;
-		const t = termIds;
+		const t = terms.map((x) => x.id);
 		const userKey = auth.user?.id ?? 'anon'; // RLS on lectures によって結果が変わる
 		if (t.length === 0) return;
 
@@ -116,7 +130,7 @@
 	<main class="mx-auto w-full max-w-md flex-1 px-4 py-4">
 		{#if loading}
 			<p class="text-sm text-stone-400">読み込み中...</p>
-		{:else if termIds.length === 0}
+		{:else if terms.length === 0}
 			<p class="text-sm text-stone-400">現在の学期データがありません</p>
 		{:else if buildings.length === 0}
 			<p class="text-sm text-stone-400">建物データがありません</p>
@@ -155,6 +169,10 @@
 				お問い合わせは
 				<a href="https://forms.gle/Ejd2d9KrkQMN2ziN8" target="_blank" rel="noopener" class="text-stone-400 underline decoration-dashed underline-offset-2">こちら</a>
 			</p>
+			{#if terms.length > 0}
+				<hr class="border-stone-300 my-1.5" />
+				<p class="text-xs text-stone-400">データ：{termLabel}</p>
+			{/if}
 		</div>
 	</footer>
 
