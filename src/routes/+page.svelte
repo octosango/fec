@@ -43,7 +43,7 @@
 	);
 
 	let termLabel = $derived.by(() => {
-		const byYear = new Map<number, string[]>();
+		const byYear = new SvelteMap<number, string[]>();
 		for (const t of terms) {
 			const list = byYear.get(t.year) ?? [];
 			list.push(t.term);
